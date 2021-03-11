@@ -17,6 +17,7 @@ FROM websphere-liberty:20.0.0.6-full-java8-ibmjava
 ENV SERVERDIRNAME reviews
 
 COPY ./servers/LibertyProjectServer /opt/ibm/wlp/usr/servers/defaultServer/
+COPY javaagent /opt/appdynamics/javaagent/
 
 RUN /opt/ibm/wlp/bin/installUtility install  --acceptLicense /opt/ibm/wlp/usr/servers/defaultServer/server.xml && \
     chmod -R g=rwx /opt/ibm/wlp/output/defaultServer/
@@ -27,5 +28,8 @@ ARG star_color
 ENV SERVICE_VERSION ${service_version:-v1}
 ENV ENABLE_RATINGS ${enable_ratings:-false}
 ENV STAR_COLOR ${star_color:-black}
+ENV OPENJ9_JAVA_OPTIONS "-javaagent:/opt/appdynamics/javaagent/javaagent.jar -Dorg.osgi.framework.bootdelegation=META-INF.services,com.singularity.*,com.ibm.*"
+
+ENV WLP_SKIP_BOOTSTRAP_AGENT "true"
 
 CMD ["/opt/ibm/wlp/bin/server", "run", "defaultServer"]
