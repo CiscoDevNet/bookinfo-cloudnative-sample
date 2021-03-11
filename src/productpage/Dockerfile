@@ -14,6 +14,8 @@
 
 FROM python:3.7.7-slim
 
+COPY appdynamics.cfg /etc/appdynamics.cfg
+
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -33,4 +35,6 @@ EXPOSE 9080
 WORKDIR /opt/microservices
 RUN python -m unittest discover
 
-CMD ["python", "productpage.py", "9080"]
+#CMD ["python", "productpage.py", "9080"]
+# pyagent run -c /etc/appdynamics.cfg -- python productpage.py 9080
+CMD ["pyagent", "run", "-c", "/etc/appdynamics.cfg", "--", "python", "productpage.py", "9080"]
