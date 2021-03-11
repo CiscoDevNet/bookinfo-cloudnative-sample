@@ -44,7 +44,7 @@ spec:
       serviceAccountName: bookinfo-productpage
       containers:
         - name: productpage
-          image: xixinjie/examples-bookinfo-productpage-v1:1.16.9
+          image: xixinjie/examples-bookinfo-productpage-v1:1.17.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9080
