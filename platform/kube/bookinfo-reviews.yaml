@@ -45,21 +45,21 @@ spec:
       serviceAccountName: bookinfo-reviews
       containers:
       - name: reviews
-        image: hhxiao/examples-bookinfo-reviews-v1:1.6.11
+        image: ciscodevcloud/examples-bookinfo-reviews-v1:1.6.1
         imagePullPolicy: IfNotPresent
         env:
         - name: LOG_DIR
           value: "/tmp/logs"
         - name: APPDYNAMICS_CONTROLLER_HOST_NAME
-          value: charlie202102251131334.saas.appdynamics.com
+          value: tesla202103101855376.saas.appdynamics.com
         - name: APPDYNAMICS_CONTROLLER_PORT
           value: "443"
         - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
           value: "true"
         - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
-          value: charlie202102251131334
+          value: tesla202103101855376
         - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
-          value: sh3fvn2z1z8g
+          value: aw5vfcs3qh52
         - name: APPDYNAMICS_AGENT_NODE_NAME
           value: "review-service-v1"
         ports:
@@ -99,21 +99,21 @@ spec:
       serviceAccountName: bookinfo-reviews
       containers:
       - name: reviews
-        image: hhxiao/examples-bookinfo-reviews-v2:1.6.11
+        image: ciscodevcloud/examples-bookinfo-reviews-v2:1.6.1
         imagePullPolicy: IfNotPresent
         env:
         - name: LOG_DIR
           value: "/tmp/logs"
         - name: APPDYNAMICS_CONTROLLER_HOST_NAME
-          value: charlie202102251131334.saas.appdynamics.com
+          value: tesla202103101855376.saas.appdynamics.com
         - name: APPDYNAMICS_CONTROLLER_PORT
           value: "443"
         - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
           value: "true"
         - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
-          value: charlie202102251131334
+          value: tesla202103101855376
         - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
-          value: sh3fvn2z1z8g
+          value: aw5vfcs3qh52
         - name: APPDYNAMICS_AGENT_NODE_NAME
           value: "review-service-v2"
         ports:
@@ -153,21 +153,21 @@ spec:
       serviceAccountName: bookinfo-reviews
       containers:
       - name: reviews
-        image: hhxiao/examples-bookinfo-reviews-v3:1.6.11
+        image: ciscodevcloud/examples-bookinfo-reviews-v3:1.6.1
         imagePullPolicy: IfNotPresent
         env:
         - name: LOG_DIR
           value: "/tmp/logs"
         - name: APPDYNAMICS_CONTROLLER_HOST_NAME
-          value: charlie202102251131334.saas.appdynamics.com
+          value: tesla202103101855376.saas.appdynamics.com
         - name: APPDYNAMICS_CONTROLLER_PORT
           value: "443"
         - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
           value: "true"
         - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
-          value: charlie202102251131334
+          value: tesla202103101855376
         - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
-          value: sh3fvn2z1z8g
+          value: aw5vfcs3qh52
         - name: APPDYNAMICS_AGENT_NODE_NAME
           value: "review-service-v3"
         ports:
