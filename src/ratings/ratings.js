@@ -19,8 +19,8 @@ require("appdynamics").profile({
   accountName: 'tesla202103101855376',
   accountAccessKey: 'aw5vfcs3qh52', //required
   applicationName: 'bookinfo',
-  tierName: 'rating-service-'+process.env.SERVICE_VERSION,
-  nodeName: 'rating-'+process.env.SERVICE_VERSION
+  tierName: 'rating-service',
+  nodeName: 'rating-service-'+process.env.SERVICE_VERSION
  });
 
 var http = require('http')

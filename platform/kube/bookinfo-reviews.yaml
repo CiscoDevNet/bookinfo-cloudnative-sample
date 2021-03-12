@@ -60,6 +60,8 @@ spec:
           value: tesla202103101855376
         - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
           value: aw5vfcs3qh52
+        - name: APPDYNAMICS_AGENT_TIER_NAME
+          value: "review-service"
         - name: APPDYNAMICS_AGENT_NODE_NAME
           value: "review-service-v1"
         ports:
@@ -114,6 +116,8 @@ spec:
           value: tesla202103101855376
         - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
           value: aw5vfcs3qh52
+        - name: APPDYNAMICS_AGENT_TIER_NAME
+          value: "review-service"
         - name: APPDYNAMICS_AGENT_NODE_NAME
           value: "review-service-v2"
         ports:
@@ -168,6 +172,8 @@ spec:
           value: tesla202103101855376
         - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
           value: aw5vfcs3qh52
+        - name: APPDYNAMICS_AGENT_TIER_NAME
+          value: "review-service"
         - name: APPDYNAMICS_AGENT_NODE_NAME
           value: "review-service-v3"
         ports:
