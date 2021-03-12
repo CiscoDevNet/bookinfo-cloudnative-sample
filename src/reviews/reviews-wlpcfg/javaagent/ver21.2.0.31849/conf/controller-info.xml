@@ -18,7 +18,7 @@
     You can override this configuration with an environment variable 'APPDYNAMICS_CONTROLLER_HOST_NAME' or
     the system property '-Dappdynamics.controller.hostName'  -->
 
-    <controller-host>charlie202102251131334_23898f6b-a563-42dc-9bf6</controller-host>
+    <controller-host>charlie202102251131334.saas.appdynamics.com</controller-host>
 
     <!--  The http(s) port of the AppDynamics Controller. If 'controller-ssl-enabled' below is set to true, you must
     specify the HTTPS port of the Controller, otherwise specify the HTTP port. The Controller listens on port 8090 by default.
@@ -28,7 +28,7 @@
     You can override this configuration with an environment variable 'APPDYNAMICS_CONTROLLER_PORT' or
     the system property '-Dappdynamics.controller.port'  -->
 
-    <controller-port>8090</controller-port>
+    <controller-port>443</controller-port>
 
     <!--  Connect to the Controller using SSL(HTTPS). If you set this to true,
     set the controller-port property to the HTTPS port for the Controller.
@@ -37,7 +37,7 @@
     You can override this configuration with an environment variable 'APPDYNAMICS_CONTROLLER_SSL_ENABLED' or
     the system property '-Dappdynamics.controller.ssl.enabled'  -->
 
-    <controller-ssl-enabled>false</controller-ssl-enabled>
+    <controller-ssl-enabled>true</controller-ssl-enabled>
 
     <!--  Truncate the hostname to remove the domain name.
     For example, 'server.mydomain.com' becomes 'server'. Hostnames with no domain remain unchanged.

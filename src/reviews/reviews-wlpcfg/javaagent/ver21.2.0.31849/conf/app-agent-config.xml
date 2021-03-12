@@ -142,6 +142,10 @@
 
                 <!-- uncomment this to 'not register class file transformer for retransformation' in java 1.6. Needs a restart -->
                 <!-- property name="register-for-retransform" value="true" / -->
+                <property name="exclude.classes.from.class.loader.1" value="com.guidewire.pl.system.gosu.GosuPluginContainer" />
+                <property name="exclude.classes.from.class.loader.2" value="gw.internal.gosu.compiler.GosuClassLoader" />
+                <property name="exclude.classes.from.class.loader.3" value="com.guidewire.pl.system.integration.plugins.Standard" />
+                <property name="exclude.classes.from.class.loader.4" value="com.guidewire.pl.system.integration.plugins.StandardClassLoader" />
             </configuration-properties>
             <configuration>
                 <!--  the following packages are not processed by the BCI engine by default
