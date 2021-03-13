@@ -14,14 +14,20 @@
 
 FROM ruby:2.7.1-slim
 
-COPY details.rb /opt/microservices/
+COPY Gemfile* /opt/microservices/
+COPY *.rb /opt/microservices/
+COPY config /opt/microservices/config
+COPY appdynamics-cpp-sdk /opt/appdynamics-cpp-sdk
 
 ARG service_version
 ENV SERVICE_VERSION ${service_version:-v1}
 ARG enable_external_book_service
 ENV ENABLE_EXTERNAL_BOOK_SERVICE ${enable_external_book_service:-false}
+ENV LD_LIBRARY_PATH /opt/appdynamics-cpp-sdk:/opt/appdynamics-cpp-sdk/lib:$LD_LIBRARY_PATH
 
-EXPOSE 9080
+RUN bundle
+
+EXPOSE 4567
 WORKDIR /opt/microservices
 
-CMD ["ruby", "details.rb", "9080"]
+CMD ["ruby", "main.rb"]
