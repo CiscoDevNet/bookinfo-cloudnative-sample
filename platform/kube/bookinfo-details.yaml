@@ -50,8 +50,11 @@ spec:
     spec:
       containers:
       - name: details
-        image: docker.io/istio/examples-bookinfo-details-v1:1.16.2
+        image: ciscodevcloud/examples-bookinfo-details-v1:1.6.3
         imagePullPolicy: IfNotPresent
+        env:
+        - name: APPD_NODEINDEX_PATH
+          value: "/tmp/appdynamics/nodeindex"
         ports:
         - containerPort: 9080
         securityContext:

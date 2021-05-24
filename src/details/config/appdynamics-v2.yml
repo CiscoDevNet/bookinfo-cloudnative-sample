@@ -1,6 +1,6 @@
 app_name: bookinfo
-tier_name: details
-node_name: Production
+tier_name: details-service
+node_name: details-service-v2
 controller:
   host: tesla202103101855376.saas.appdynamics.com
   port: 443

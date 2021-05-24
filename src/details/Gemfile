@@ -1,2 +1,2 @@
-gem 'appdynamics'
+gem 'appdynamics', '~> 1.2', '>= 1.2.1'
 gem 'sinatra'

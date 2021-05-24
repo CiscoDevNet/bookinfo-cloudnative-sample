@@ -1,0 +1,10 @@
+app_name: bookinfo
+tier_name: details-service
+node_name: details-service-v1
+controller:
+  host: tesla202103101855376.saas.appdynamics.com
+  port: 443
+  account: tesla202103101855376
+  access_key: aw5vfcs3qh52
+  use_ssl: true
+  log_dir: /tmp/

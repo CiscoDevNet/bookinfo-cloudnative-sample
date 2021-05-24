@@ -62,13 +62,13 @@ src/build-services.sh "${VERSION}" "${PREFIX}"
 #get all the new image names and tags
 for v in ${VERSION} "latest"
 do
-  IMAGES+=$(docker images -f reference="${PREFIX}/examples-bookinfo*:$v" --format "{{.Repository}}:$v")
+  IMAGES+=$(docker images -f reference="${PREFIX}/examples-bookinfo-details*:$v" --format "{{.Repository}}:$v")
   IMAGES+=" "
 done
 
 # check that $IMAGES contains the images we've just built
 if [[ "${IMAGES}" =~ ^\ +$ ]] ; then
-  echo "Found no images matching prefix \"${PREFIX}/examples-bookinfo\"."
+  echo "Found no images matching prefix \"${PREFIX}/examples-bookinfo-details\"."
   echo "Try running the script without specifying the image registry in --prefix (e.g. --prefix=/foo instead of --prefix=docker.io/foo)."
   exit 1
 fi
@@ -116,5 +116,5 @@ do
 done
 
 #Update image references in the yaml files
-find . -name "*bookinfo*.yaml" -exec sed -i.bak "s/image:.*\\(\\/examples-bookinfo-.*\\):.*/image: ${PREFIX//\//\\\/}\\1:$VERSION/g" {} +
+find . -name "*bookinfo-details*.yaml" -exec sed -i.bak "s/image:.*\\(\\/examples-bookinfo-details-.*\\):.*/image: ${PREFIX//\//\\\/}\\1:$VERSION/g" {} +
 

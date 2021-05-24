@@ -12,22 +12,24 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-FROM ruby:2.7.1-slim
+FROM ruby:2.7.1
 
 COPY Gemfile* /opt/microservices/
 COPY *.rb /opt/microservices/
 COPY config /opt/microservices/config
+
 COPY appdynamics-cpp-sdk /opt/appdynamics-cpp-sdk
+ENV LD_LIBRARY_PATH /opt/appdynamics-cpp-sdk:/opt/appdynamics-cpp-sdk/lib:$LD_LIBRARY_PATH
+
+RUN gem install activesupport appdynamics sinatra
 
 ARG service_version
 ENV SERVICE_VERSION ${service_version:-v1}
+
 ARG enable_external_book_service
 ENV ENABLE_EXTERNAL_BOOK_SERVICE ${enable_external_book_service:-false}
-ENV LD_LIBRARY_PATH /opt/appdynamics-cpp-sdk:/opt/appdynamics-cpp-sdk/lib:$LD_LIBRARY_PATH
 
-RUN bundle
-
-EXPOSE 4567
+EXPOSE 9080
 WORKDIR /opt/microservices
 
 CMD ["ruby", "main.rb"]
