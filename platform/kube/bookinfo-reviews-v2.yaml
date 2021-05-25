@@ -36,11 +36,23 @@ spec:
     spec:
       containers:
       - name: reviews
-        image: docker.io/istio/examples-bookinfo-reviews-v2:1.16.2
+        image: ciscodevcloud/examples-bookinfo-reviews-v2:1.6.3
         imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: appd-agent-envs
         env:
         - name: LOG_DIR
           value: "/tmp/logs"
+        - name: APPDYNAMICS_AGENT_TIER_NAME
+          value: "review-service"
+        - name: APPDYNAMICS_AGENT_NODE_NAME
+          value: "review-service-v2"
+        - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: appd-agent-secret
+              key: access-key
         ports:
         - containerPort: 9080
         volumeMounts:
@@ -48,6 +60,8 @@ spec:
           mountPath: /tmp
         - name: wlp-output
           mountPath: /opt/ibm/wlp/output
+        - name: appd-java-agent-log-config
+          mountPath: /opt/appdynamics/ver20.8.0/conf/logging/log4j2.xml
         securityContext:
           runAsUser: 1000
       volumes:
@@ -55,4 +69,20 @@ spec:
         emptyDir: {}
       - name: tmp
         emptyDir: {}
+      - name: appd-agent-repo
+        emptyDir: {}
+      - name: appd-java-agent-log-config
+        configMap:
+          name: appd-java-agent-log-config
+      initContainers:
+      - command:
+        - cp
+        - -r
+        - /opt/appdynamics/.
+        - /opt/temp
+        name: appd-agent
+        image: docker.io/appdynamics/java-agent:20.8.0
+        volumeMounts:
+        - mountPath: /opt/temp
+          name: appd-agent-repo
 ---

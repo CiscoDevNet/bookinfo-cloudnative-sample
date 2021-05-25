@@ -45,25 +45,23 @@ spec:
       serviceAccountName: bookinfo-reviews
       containers:
       - name: reviews
-        image: ciscodevcloud/examples-bookinfo-reviews-v1:1.6.1
+        image: ciscodevcloud/examples-bookinfo-reviews-v1:1.6.3
         imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: appd-agent-envs
         env:
         - name: LOG_DIR
           value: "/tmp/logs"
-        - name: APPDYNAMICS_CONTROLLER_HOST_NAME
-          value: tesla202103101855376.saas.appdynamics.com
-        - name: APPDYNAMICS_CONTROLLER_PORT
-          value: "443"
-        - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
-          value: "true"
-        - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
-          value: tesla202103101855376
-        - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
-          value: aw5vfcs3qh52
         - name: APPDYNAMICS_AGENT_TIER_NAME
           value: "review-service"
         - name: APPDYNAMICS_AGENT_NODE_NAME
           value: "review-service-v1"
+        - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: appd-agent-secret
+              key: access-key
         ports:
         - containerPort: 9080
         volumeMounts:
@@ -71,6 +69,10 @@ spec:
           mountPath: /tmp
         - name: wlp-output
           mountPath: /opt/ibm/wlp/output
+        - name: appd-agent-repo
+          mountPath: /opt/appdynamics
+        - name: appd-java-agent-log-config
+          mountPath: /opt/appdynamics/ver20.8.0/conf/logging/log4j2.xml
         securityContext:
           runAsUser: 1000
       volumes:
@@ -78,6 +80,22 @@ spec:
         emptyDir: {}
       - name: tmp
         emptyDir: {}
+      - name: appd-agent-repo
+        emptyDir: {}
+      - name: appd-java-agent-log-config
+        configMap:
+          name: appd-java-agent-log-config
+      initContainers:
+      - command:
+        - cp
+        - -r
+        - /opt/appdynamics/.
+        - /opt/temp
+        name: appd-agent
+        image: docker.io/appdynamics/java-agent:20.8.0
+        volumeMounts:
+        - mountPath: /opt/temp
+          name: appd-agent-repo
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -101,25 +119,23 @@ spec:
       serviceAccountName: bookinfo-reviews
       containers:
       - name: reviews
-        image: ciscodevcloud/examples-bookinfo-reviews-v2:1.6.1
+        image: ciscodevcloud/examples-bookinfo-reviews-v2:1.6.3
         imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: appd-agent-envs
         env:
         - name: LOG_DIR
           value: "/tmp/logs"
-        - name: APPDYNAMICS_CONTROLLER_HOST_NAME
-          value: tesla202103101855376.saas.appdynamics.com
-        - name: APPDYNAMICS_CONTROLLER_PORT
-          value: "443"
-        - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
-          value: "true"
-        - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
-          value: tesla202103101855376
-        - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
-          value: aw5vfcs3qh52
         - name: APPDYNAMICS_AGENT_TIER_NAME
           value: "review-service"
         - name: APPDYNAMICS_AGENT_NODE_NAME
           value: "review-service-v2"
+        - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: appd-agent-secret
+              key: access-key
         ports:
         - containerPort: 9080
         volumeMounts:
@@ -127,6 +143,8 @@ spec:
           mountPath: /tmp
         - name: wlp-output
           mountPath: /opt/ibm/wlp/output
+        - name: appd-java-agent-log-config
+          mountPath: /opt/appdynamics/ver20.8.0/conf/logging/log4j2.xml
         securityContext:
           runAsUser: 1000
       volumes:
@@ -134,6 +152,22 @@ spec:
         emptyDir: {}
       - name: tmp
         emptyDir: {}
+      - name: appd-agent-repo
+        emptyDir: {}
+      - name: appd-java-agent-log-config
+        configMap:
+          name: appd-java-agent-log-config
+      initContainers:
+      - command:
+        - cp
+        - -r
+        - /opt/appdynamics/.
+        - /opt/temp
+        name: appd-agent
+        image: docker.io/appdynamics/java-agent:20.8.0
+        volumeMounts:
+        - mountPath: /opt/temp
+          name: appd-agent-repo
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -157,25 +191,23 @@ spec:
       serviceAccountName: bookinfo-reviews
       containers:
       - name: reviews
-        image: ciscodevcloud/examples-bookinfo-reviews-v3:1.6.1
+        image: ciscodevcloud/examples-bookinfo-reviews-v3:1.6.3
         imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: appd-agent-envs
         env:
         - name: LOG_DIR
           value: "/tmp/logs"
-        - name: APPDYNAMICS_CONTROLLER_HOST_NAME
-          value: tesla202103101855376.saas.appdynamics.com
-        - name: APPDYNAMICS_CONTROLLER_PORT
-          value: "443"
-        - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
-          value: "true"
-        - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
-          value: tesla202103101855376
-        - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
-          value: aw5vfcs3qh52
         - name: APPDYNAMICS_AGENT_TIER_NAME
           value: "review-service"
         - name: APPDYNAMICS_AGENT_NODE_NAME
           value: "review-service-v3"
+        - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: appd-agent-secret
+              key: access-key
         ports:
         - containerPort: 9080
         volumeMounts:
@@ -183,6 +215,8 @@ spec:
           mountPath: /tmp
         - name: wlp-output
           mountPath: /opt/ibm/wlp/output
+        - name: appd-java-agent-log-config
+          mountPath: /opt/appdynamics/ver20.8.0/conf/logging/log4j2.xml
         securityContext:
           runAsUser: 1000
       volumes:
@@ -190,3 +224,20 @@ spec:
         emptyDir: {}
       - name: tmp
         emptyDir: {}
+      - name: appd-agent-repo
+        emptyDir: {}
+      - name: appd-java-agent-log-config
+        configMap:
+          name: appd-java-agent-log-config
+      initContainers:
+      - command:
+        - cp
+        - -r
+        - /opt/appdynamics/.
+        - /opt/temp
+        name: appd-agent
+        image: docker.io/appdynamics/java-agent:20.8.0
+        volumeMounts:
+        - mountPath: /opt/temp
+          name: appd-agent-repo
+---

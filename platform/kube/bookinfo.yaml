@@ -132,6 +132,7 @@ spec:
         securityContext:
           runAsUser: 1000
 ---
+
 ##################################################################################################
 # Reviews service
 ##################################################################################################
@@ -144,8 +145,8 @@ metadata:
     service: reviews
 spec:
   ports:
-  - port: 9080
-    name: http
+    - port: 9080
+      name: http
   selector:
     app: reviews
 ---
@@ -177,26 +178,58 @@ spec:
     spec:
       serviceAccountName: bookinfo-reviews
       containers:
-      - name: reviews
-        image: docker.io/istio/examples-bookinfo-reviews-v1:1.16.2
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: LOG_DIR
-          value: "/tmp/logs"
-        ports:
-        - containerPort: 9080
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-        - name: wlp-output
-          mountPath: /opt/ibm/wlp/output
-        securityContext:
-          runAsUser: 1000
+        - name: reviews
+          image: ciscodevcloud/examples-bookinfo-reviews-v1:1.6.3
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: appd-agent-envs
+          env:
+            - name: LOG_DIR
+              value: "/tmp/logs"
+            - name: APPDYNAMICS_AGENT_TIER_NAME
+              value: "review-service"
+            - name: APPDYNAMICS_AGENT_NODE_NAME
+              value: "review-service-v1"
+            - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: appd-agent-secret
+                  key: access-key
+          ports:
+            - containerPort: 9080
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: wlp-output
+              mountPath: /opt/ibm/wlp/output
+            - name: appd-agent-repo
+              mountPath: /opt/appdynamics
+            - name: appd-java-agent-log-config
+              mountPath: /opt/appdynamics/ver20.8.0/conf/logging/log4j2.xml
+          securityContext:
+            runAsUser: 1000
       volumes:
-      - name: wlp-output
-        emptyDir: {}
-      - name: tmp
-        emptyDir: {}
+        - name: wlp-output
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        - name: appd-agent-repo
+          emptyDir: {}
+        - name: appd-java-agent-log-config
+          configMap:
+            name: appd-java-agent-log-config
+      initContainers:
+        - command:
+            - cp
+            - -r
+            - /opt/appdynamics/.
+            - /opt/temp
+          name: appd-agent
+          image: docker.io/appdynamics/java-agent:20.8.0
+          volumeMounts:
+            - mountPath: /opt/temp
+              name: appd-agent-repo
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -219,26 +252,56 @@ spec:
     spec:
       serviceAccountName: bookinfo-reviews
       containers:
-      - name: reviews
-        image: docker.io/istio/examples-bookinfo-reviews-v2:1.16.2
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: LOG_DIR
-          value: "/tmp/logs"
-        ports:
-        - containerPort: 9080
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-        - name: wlp-output
-          mountPath: /opt/ibm/wlp/output
-        securityContext:
-          runAsUser: 1000
+        - name: reviews
+          image: ciscodevcloud/examples-bookinfo-reviews-v2:1.6.3
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: appd-agent-envs
+          env:
+            - name: LOG_DIR
+              value: "/tmp/logs"
+            - name: APPDYNAMICS_AGENT_TIER_NAME
+              value: "review-service"
+            - name: APPDYNAMICS_AGENT_NODE_NAME
+              value: "review-service-v2"
+            - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: appd-agent-secret
+                  key: access-key
+          ports:
+            - containerPort: 9080
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: wlp-output
+              mountPath: /opt/ibm/wlp/output
+            - name: appd-java-agent-log-config
+              mountPath: /opt/appdynamics/ver20.8.0/conf/logging/log4j2.xml
+          securityContext:
+            runAsUser: 1000
       volumes:
-      - name: wlp-output
-        emptyDir: {}
-      - name: tmp
-        emptyDir: {}
+        - name: wlp-output
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        - name: appd-agent-repo
+          emptyDir: {}
+        - name: appd-java-agent-log-config
+          configMap:
+            name: appd-java-agent-log-config
+      initContainers:
+        - command:
+            - cp
+            - -r
+            - /opt/appdynamics/.
+            - /opt/temp
+          name: appd-agent
+          image: docker.io/appdynamics/java-agent:20.8.0
+          volumeMounts:
+            - mountPath: /opt/temp
+              name: appd-agent-repo
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -261,26 +324,56 @@ spec:
     spec:
       serviceAccountName: bookinfo-reviews
       containers:
-      - name: reviews
-        image: docker.io/istio/examples-bookinfo-reviews-v3:1.16.2
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: LOG_DIR
-          value: "/tmp/logs"
-        ports:
-        - containerPort: 9080
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-        - name: wlp-output
-          mountPath: /opt/ibm/wlp/output
-        securityContext:
-          runAsUser: 1000
+        - name: reviews
+          image: ciscodevcloud/examples-bookinfo-reviews-v3:1.6.3
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: appd-agent-envs
+          env:
+            - name: LOG_DIR
+              value: "/tmp/logs"
+            - name: APPDYNAMICS_AGENT_TIER_NAME
+              value: "review-service"
+            - name: APPDYNAMICS_AGENT_NODE_NAME
+              value: "review-service-v3"
+            - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: appd-agent-secret
+                  key: access-key
+          ports:
+            - containerPort: 9080
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: wlp-output
+              mountPath: /opt/ibm/wlp/output
+            - name: appd-java-agent-log-config
+              mountPath: /opt/appdynamics/ver20.8.0/conf/logging/log4j2.xml
+          securityContext:
+            runAsUser: 1000
       volumes:
-      - name: wlp-output
-        emptyDir: {}
-      - name: tmp
-        emptyDir: {}
+        - name: wlp-output
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+        - name: appd-agent-repo
+          emptyDir: {}
+        - name: appd-java-agent-log-config
+          configMap:
+            name: appd-java-agent-log-config
+      initContainers:
+        - command:
+            - cp
+            - -r
+            - /opt/appdynamics/.
+            - /opt/temp
+          name: appd-agent
+          image: docker.io/appdynamics/java-agent:20.8.0
+          volumeMounts:
+            - mountPath: /opt/temp
+              name: appd-agent-repo
 ---
 ##################################################################################################
 # Productpage services
@@ -294,8 +387,8 @@ metadata:
     service: productpage
 spec:
   ports:
-  - port: 9080
-    name: http
+    - port: 9080
+      name: http
   selector:
     app: productpage
 ---
@@ -327,17 +420,31 @@ spec:
     spec:
       serviceAccountName: bookinfo-productpage
       containers:
-      - name: productpage
-        image: docker.io/istio/examples-bookinfo-productpage-v1:1.16.2
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 9080
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-        securityContext:
-          runAsUser: 1000
+        - name: productpage
+          image: ciscodevcloud/examples-bookinfo-productpage-v1:1.6.3
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: appd-agent-envs
+          env:
+            - name: APPDYNAMICS_AGENT_TIER_NAME
+              value: "productpage"
+            - name: APPDYNAMICS_AGENT_NODE_NAME
+              value: "productpage-v1"
+            - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: appd-agent-secret
+                  key: access-key
+          ports:
+            - containerPort: 9080
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          securityContext:
+            runAsUser: 1000
       volumes:
-      - name: tmp
-        emptyDir: {}
+        - name: tmp
+          emptyDir: {}
 ---
+
