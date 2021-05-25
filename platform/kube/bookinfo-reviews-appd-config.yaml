@@ -1,0 +1,83 @@
+# Copyright Istio Authors
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+##################################################################################################
+# This file defines secrets, configmaps for AppDynamics Agents Installation via init containers.
+#
+# To apply all of them:
+#
+#   kubectl apply -f platform/kube/bookinfo-reviews-appd-config.yaml
+#
+##################################################################################################
+
+##################################################################################################
+# AppDynamics Agent Secret
+##################################################################################################
+apiVersion: v1
+kind: Secret
+metadata:
+  name: appd-agent-secret
+type: Opaque
+data:
+  access-key: <your-base64-encoded-access-key>
+---
+##################################################################################################
+# AppDynamics Agent Environment Variables
+##################################################################################################
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: appd-agent-envs
+data:
+  APPDYNAMICS_AGENT_ACCOUNT_NAME: customer1
+  APPDYNAMICS_AGENT_APPLICATION_NAME: bookinfo
+  APPDYNAMICS_AGENT_REUSE_NODE_NAME_PREFIX: Node
+  APPDYNAMICS_CONTROLLER_HOST_NAME: 4516controllernoss-pstraining-lr7mbebh.srv.ravcloud.com
+  APPDYNAMICS_CONTROLLER_PORT: "8090"
+  APPDYNAMICS_CONTROLLER_SSL_ENABLED: "false"
+  APPDYNAMICS_EVENTS_API_URL: "http://4516controllernoss-pstraining-lr7mbebh.srv.ravcloud.com:9080"
+  APPDYNAMICS_GLOBAL_ACCOUNT_NAME: customer1_1a809814-cea2-4440-a922-f7909d9f6ef6
+---
+##################################################################################################
+# AppDynamics Java Agent Logging Configuration: redirect agent output to stdout
+##################################################################################################
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: appd-java-agent-log-config
+data:
+  log4j.xml: |
+    <?xml version="1.0"?>
+    <Loggers>
+      <!-- to control the logging level of the agent log files, change "level" attribute. level="all|trace|debug|info|warn|error"-->
+      <AsyncLogger name="com.singularity" level="info" additivity="false">
+        <AppenderRef ref="DefaultAppender"/>
+        <AppenderRef ref="RESTAppender"/>
+        <AppenderRef ref="Console"/>
+      </AsyncLogger>
+      <AsyncLogger name="com.singularity.BusinessTransactions" level="info" additivity="false">
+        <AppenderRef ref="BusinessTransactionsLogger"/>
+      </AsyncLogger>
+      <AsyncLogger name="com.singularity.dynamicservice" level="info" additivity="false">
+        <AppenderRef ref="DynamicServiceAppender"/>
+      </AsyncLogger>
+      <AsyncLogger name="com.singularity.BCTLogger" level="info" additivity="false">
+        <AppenderRef ref="BCTAppender"/>
+      </AsyncLogger>
+      <Root level="error">
+        <AppenderRef ref="DefaultAppender"/>
+        <AppenderRef ref="Console"/>
+      </Root>
+    </Loggers>
+---
