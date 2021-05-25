@@ -36,13 +36,21 @@ spec:
     spec:
       containers:
       - name: details
-        image: ciscodevcloud/examples-bookinfo-details-v2:1.6.3
+        image: ciscodevcloud/examples-bookinfo-details-v2:2.0.8
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
         env:
-        - name: DO_NOT_ENCRYPT
-          value: "true"
+          - name: DO_NOT_ENCRYPT
+            value: "true"
         securityContext:
           runAsUser: 1000
+        volumeMounts:
+        - name: appdynamics-conf
+          mountPath: /config
+          readOnly: true
+      volumes:
+        - name: appdynamics-conf
+          configMap:
+            name: appdynamics-conf
 ---

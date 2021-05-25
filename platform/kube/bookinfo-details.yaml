@@ -29,6 +29,23 @@ spec:
   selector:
     app: details
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: appdynamics-conf
+data:
+  appdynamics.yml: |
+    app_name: bookinfo
+    tier_name: details
+    node_name: details-service-v1
+    controller:
+      host: <account_name>.saas.appdynamics.com
+      port: 443
+      account: <account_name>
+      access_key: <access_key>
+      use_ssl: true
+      log_dir: /tmp/
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -50,13 +67,21 @@ spec:
     spec:
       containers:
       - name: details
-        image: ciscodevcloud/examples-bookinfo-details-v1:1.6.3
+        image: ciscodevcloud/examples-bookinfo-details-v1:2.0.8
         imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
         env:
         - name: APPD_NODEINDEX_PATH
           value: "/tmp/appdynamics/nodeindex"
-        ports:
-        - containerPort: 9080
         securityContext:
           runAsUser: 1000
+        volumeMounts:
+        - name: appdynamics-conf
+          mountPath: /config
+          readOnly: true
+      volumes:
+        - name: appdynamics-conf
+          configMap:
+            name: appdynamics-conf
 ---

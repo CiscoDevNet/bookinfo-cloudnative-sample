@@ -50,8 +50,27 @@ spec:
     spec:
       containers:
       - name: ratings
-        image: docker.io/istio/examples-bookinfo-ratings-v1:1.16.2
+        image: ciscodevcloud/examples-bookinfo-ratings-v1:2.0.5
         imagePullPolicy: IfNotPresent
+        env:
+          - name: APPDYNAMICS_CONTROLLER_HOST_NAME
+            value: <account_name>.saas.appdynamics.com
+          - name: APPDYNAMICS_CONTROLLER_PORT
+            value: "443"
+          - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
+            value: "true"
+          - name: APPDYNAMICS_AGENT_APPLICATION_NAME
+            value: bookinfo
+          - name: APPDYNAMICS_AGENT_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: APPDYNAMICS_AGENT_TIER_NAME
+            value: ratings
+          - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
+            value: <account_name>
+          - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+            value: <access_key>
         ports:
         - containerPort: 9080
         securityContext:
