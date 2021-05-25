@@ -51,9 +51,9 @@ spec:
           - name: APPDYNAMICS_AGENT_TIER_NAME
             value: ratings
           - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
-            value: hopper202105232309044
+            value: <account_name>
           - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
-            value: xq2bbvoohu3z
+            value: <access_key>
           # ratings-v2 will use mongodb as the default db backend.
           # if you would like to use mysqldb then you can use this file
           # which sets DB_TYPE = 'mysql' and the rest of the parameters shown

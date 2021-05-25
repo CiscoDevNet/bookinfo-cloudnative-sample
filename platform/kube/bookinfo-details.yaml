@@ -39,10 +39,10 @@ data:
     tier_name: details
     node_name: details-service-v1
     controller:
-      host: hopper202105232309044.saas.appdynamics.com
+      host: <account_name>.saas.appdynamics.com
       port: 443
-      account: hopper202105232309044
-      access_key: xq2bbvoohu3z
+      account: <account_name>
+      access_key: <access_key>
       use_ssl: true
       log_dir: /tmp/
 ---
