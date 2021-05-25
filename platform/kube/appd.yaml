@@ -13,11 +13,11 @@
 #   limitations under the License.
 
 ##################################################################################################
-# This file defines secrets, configmaps for AppDynamics Agents Installation via init containers.
+# This file defines secrets, configmaps for AppDynamics Agents Settings.
 #
 # To apply all of them:
 #
-#   kubectl apply -f platform/kube/bookinfo-reviews-appd-config.yaml
+#   kubectl apply -f platform/kube/appd.yaml
 #
 ##################################################################################################
 

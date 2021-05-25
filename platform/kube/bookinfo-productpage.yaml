@@ -44,8 +44,23 @@ spec:
       serviceAccountName: bookinfo-productpage
       containers:
         - name: productpage
-          image: ciscodevcloud/examples-bookinfo-productpage-v1:1.6.1
+          image: ciscodevcloud/examples-bookinfo-productpage-v1:1.6.3
           imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+              name: appd-agent-envs
+          env:
+            - name: APPDYNAMICS_AGENT_TIER_NAME
+              value: "productpage"
+            - name: APPDYNAMICS_AGENT_NODE_NAME
+              value: "productpage-v1"
+            - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
+              value: "off"
+            - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+              valueFrom:
+              secretKeyRef:
+                name: appd-agent-secret
+                key: access-key
           ports:
             - containerPort: 9080
           volumeMounts:
