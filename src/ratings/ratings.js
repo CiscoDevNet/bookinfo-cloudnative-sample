@@ -12,16 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-require("appdynamics").profile({
-  controllerHostName: 'tesla202103101855376.saas.appdynamics.com',
-  controllerPort: 443,
-  controllerSslEnabled: true,  // Set to true if controllerPort is SSL
-  accountName: 'tesla202103101855376',
-  accountAccessKey: 'aw5vfcs3qh52', //required
-  applicationName: 'bookinfo',
-  tierName: 'rating-service',
-  nodeName: 'rating-service-'+process.env.SERVICE_VERSION
- });
+require("appdynamics").profile();
 
 var http = require('http')
 var dispatcher = require('httpdispatcher')
