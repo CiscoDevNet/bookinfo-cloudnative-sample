@@ -40,7 +40,7 @@ spec:
         imagePullPolicy: IfNotPresent
         envFrom:
         - configMapRef:
-          name: appd-agent-envs
+            name: appd-agent-envs
         env:
         - name: LOG_DIR
           value: "/tmp/logs"
@@ -50,9 +50,9 @@ spec:
           value: "review-service-v2"
         - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
           valueFrom:
-          secretKeyRef:
-            name: appd-agent-secret
-            key: access-key
+            secretKeyRef:
+              name: appd-agent-secret
+              key: access-key
         ports:
         - containerPort: 9080
         volumeMounts:

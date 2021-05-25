@@ -183,7 +183,7 @@ spec:
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
-              name: appd-agent-envs
+                name: appd-agent-envs
           env:
             - name: LOG_DIR
               value: "/tmp/logs"
@@ -193,9 +193,9 @@ spec:
               value: "review-service-v1"
             - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
               valueFrom:
-              secretKeyRef:
-                name: appd-agent-secret
-                key: access-key
+                secretKeyRef:
+                  name: appd-agent-secret
+                  key: access-key
           ports:
             - containerPort: 9080
           volumeMounts:
@@ -257,7 +257,7 @@ spec:
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
-              name: appd-agent-envs
+                name: appd-agent-envs
           env:
             - name: LOG_DIR
               value: "/tmp/logs"
@@ -267,9 +267,9 @@ spec:
               value: "review-service-v2"
             - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
               valueFrom:
-              secretKeyRef:
-                name: appd-agent-secret
-                key: access-key
+                secretKeyRef:
+                  name: appd-agent-secret
+                  key: access-key
           ports:
             - containerPort: 9080
           volumeMounts:
@@ -329,7 +329,7 @@ spec:
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
-              name: appd-agent-envs
+                name: appd-agent-envs
           env:
             - name: LOG_DIR
               value: "/tmp/logs"
@@ -339,9 +339,9 @@ spec:
               value: "review-service-v3"
             - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
               valueFrom:
-              secretKeyRef:
-                name: appd-agent-secret
-                key: access-key
+                secretKeyRef:
+                  name: appd-agent-secret
+                  key: access-key
           ports:
             - containerPort: 9080
           volumeMounts:
@@ -425,7 +425,7 @@ spec:
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
-              name: appd-agent-envs
+                name: appd-agent-envs
           env:
             - name: APPDYNAMICS_AGENT_TIER_NAME
               value: "productpage"
@@ -433,9 +433,9 @@ spec:
               value: "productpage-v1"
             - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
               valueFrom:
-              secretKeyRef:
-                name: appd-agent-secret
-                key: access-key
+                secretKeyRef:
+                  name: appd-agent-secret
+                  key: access-key
           ports:
             - containerPort: 9080
           volumeMounts:

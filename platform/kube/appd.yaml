@@ -30,7 +30,7 @@ metadata:
   name: appd-agent-secret
 type: Opaque
 data:
-  access-key: <your-base64-encoded-access-key>
+  access-key: eHEyYmJ2b29odTN6
 ---
 ##################################################################################################
 # AppDynamics Agent Environment Variables
@@ -40,12 +40,12 @@ kind: ConfigMap
 metadata:
   name: appd-agent-envs
 data:
-  APPDYNAMICS_AGENT_ACCOUNT_NAME: customer1
+  APPDYNAMICS_AGENT_ACCOUNT_NAME: hopper202105232309044
   APPDYNAMICS_AGENT_APPLICATION_NAME: bookinfo
   APPDYNAMICS_AGENT_REUSE_NODE_NAME_PREFIX: Node
-  APPDYNAMICS_CONTROLLER_HOST_NAME: 4516controllernoss-pstraining-lr7mbebh.srv.ravcloud.com
-  APPDYNAMICS_CONTROLLER_PORT: "8090"
-  APPDYNAMICS_CONTROLLER_SSL_ENABLED: "false"
+  APPDYNAMICS_CONTROLLER_HOST_NAME: hopper202105232309044.saas.appdynamics.com
+  APPDYNAMICS_CONTROLLER_PORT: "443"
+  APPDYNAMICS_CONTROLLER_SSL_ENABLED: "true"
   APPDYNAMICS_EVENTS_API_URL: "http://4516controllernoss-pstraining-lr7mbebh.srv.ravcloud.com:9080"
   APPDYNAMICS_GLOBAL_ACCOUNT_NAME: customer1_1a809814-cea2-4440-a922-f7909d9f6ef6
 ---
