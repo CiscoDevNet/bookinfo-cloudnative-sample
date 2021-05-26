@@ -34,9 +34,12 @@ spec:
         app: reviews
         version: v2
     spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
       containers:
       - name: reviews
-        image: ciscodevcloud/examples-bookinfo-reviews-v2:1.6.3
+        image: ciscodevcloud/examples-bookinfo-reviews-v2:1.6.7
         imagePullPolicy: IfNotPresent
         envFrom:
         - configMapRef:
@@ -60,6 +63,8 @@ spec:
           mountPath: /tmp
         - name: wlp-output
           mountPath: /opt/ibm/wlp/output
+        - name: appd-agent-repo
+          mountPath: /opt/appdynamics
         - name: appd-java-agent-log-config
           mountPath: /opt/appdynamics/ver20.8.0/conf/logging/log4j2.xml
         securityContext:
