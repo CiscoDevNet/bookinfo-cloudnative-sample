@@ -30,7 +30,7 @@ metadata:
   name: appd-agent-secret
 type: Opaque
 data:
-  access-key: eHEyYmJ2b29odTN6
+  access-key: <access_key>
 ---
 ##################################################################################################
 # AppDynamics Agent Environment Variables
@@ -40,8 +40,8 @@ kind: ConfigMap
 metadata:
   name: appd-agent-envs
 data:
-  APPDYNAMICS_AGENT_ACCOUNT_NAME: hopper202105232309044
+  APPDYNAMICS_AGENT_ACCOUNT_NAME: <account_name>
   APPDYNAMICS_AGENT_APPLICATION_NAME: bookinfo
-  APPDYNAMICS_CONTROLLER_HOST_NAME: hopper202105232309044.saas.appdynamics.com
+  APPDYNAMICS_CONTROLLER_HOST_NAME: <account_name>.saas.appdynamics.com
   APPDYNAMICS_CONTROLLER_PORT: "443"
   APPDYNAMICS_CONTROLLER_SSL_ENABLED: "true"
