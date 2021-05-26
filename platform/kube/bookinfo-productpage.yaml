@@ -44,7 +44,7 @@ spec:
       serviceAccountName: bookinfo-productpage
       containers:
         - name: productpage
-          image: ciscodevcloud/examples-bookinfo-productpage-v1:1.6.3
+          image: ciscodevcloud/examples-bookinfo-productpage-v1:1.0.0
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:

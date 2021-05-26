@@ -33,14 +33,14 @@ spec:
     spec:
       containers:
       - name: ratings
-        image: ciscodevcloud/examples-bookinfo-ratings-v2:2.1.1
+        image: ciscodevcloud/examples-bookinfo-ratings-v2:1.0.0
         imagePullPolicy: IfNotPresent
         env:
           - name: APPDYNAMICS_CONTROLLER_HOST_NAME
             valueFrom:
-              secretKeyRef:
-                key: appd_controller_host
-                name: appd-secrets
+              configMapKeyRef:
+                key: APPDYNAMICS_CONTROLLER_HOST_NAME
+                name: appd-agent-envs
           - name: APPDYNAMICS_CONTROLLER_PORT
             value: "443"
           - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
@@ -48,21 +48,19 @@ spec:
           - name: APPDYNAMICS_AGENT_APPLICATION_NAME
             value: bookinfo
           - name: APPDYNAMICS_AGENT_NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
+            value: ratings-v2
           - name: APPDYNAMICS_AGENT_TIER_NAME
             value: ratings
           - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
             valueFrom:
-              secretKeyRef:
-                key: appd_controller_account
-                name: appd-secrets
+              configMapKeyRef:
+                key: APPDYNAMICS_AGENT_ACCOUNT_NAME
+                name: appd-agent-envs
           - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
             valueFrom:
               secretKeyRef:
-                key: appd_controller_access_key
-                name: appd-secrets
+                key: access-key
+                name: appd-agent-secret
           # This assumes you registered your mysql vm as
           # istioctl register -n vm mysqldb 1.2.3.4 3306
           - name: DB_TYPE

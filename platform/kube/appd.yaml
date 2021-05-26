@@ -42,42 +42,6 @@ metadata:
 data:
   APPDYNAMICS_AGENT_ACCOUNT_NAME: hopper202105232309044
   APPDYNAMICS_AGENT_APPLICATION_NAME: bookinfo
-  APPDYNAMICS_AGENT_REUSE_NODE_NAME_PREFIX: Node
   APPDYNAMICS_CONTROLLER_HOST_NAME: hopper202105232309044.saas.appdynamics.com
   APPDYNAMICS_CONTROLLER_PORT: "443"
   APPDYNAMICS_CONTROLLER_SSL_ENABLED: "true"
-  APPDYNAMICS_EVENTS_API_URL: "http://4516controllernoss-pstraining-lr7mbebh.srv.ravcloud.com:9080"
-  APPDYNAMICS_GLOBAL_ACCOUNT_NAME: customer1_1a809814-cea2-4440-a922-f7909d9f6ef6
----
-##################################################################################################
-# AppDynamics Java Agent Logging Configuration: redirect agent output to stdout
-##################################################################################################
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: appd-java-agent-log-config
-data:
-  log4j.xml: |
-    <?xml version="1.0"?>
-    <Loggers>
-      <!-- to control the logging level of the agent log files, change "level" attribute. level="all|trace|debug|info|warn|error"-->
-      <AsyncLogger name="com.singularity" level="info" additivity="false">
-        <AppenderRef ref="DefaultAppender"/>
-        <AppenderRef ref="RESTAppender"/>
-        <AppenderRef ref="Console"/>
-      </AsyncLogger>
-      <AsyncLogger name="com.singularity.BusinessTransactions" level="info" additivity="false">
-        <AppenderRef ref="BusinessTransactionsLogger"/>
-      </AsyncLogger>
-      <AsyncLogger name="com.singularity.dynamicservice" level="info" additivity="false">
-        <AppenderRef ref="DynamicServiceAppender"/>
-      </AsyncLogger>
-      <AsyncLogger name="com.singularity.BCTLogger" level="info" additivity="false">
-        <AppenderRef ref="BCTAppender"/>
-      </AsyncLogger>
-      <Root level="error">
-        <AppenderRef ref="DefaultAppender"/>
-        <AppenderRef ref="Console"/>
-      </Root>
-    </Loggers>
----
