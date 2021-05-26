@@ -12,11 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-let abc = 443;
-console.log(abc.toString())
-require("appdynamics").profile({
-  controllerPort: parseInt(process.env.APPDYNAMICS_CONTROLLER_PORT || "443"),
-});
+require("appdynamics").profile({});
 
 var http = require('http')
 var dispatcher = require('httpdispatcher')

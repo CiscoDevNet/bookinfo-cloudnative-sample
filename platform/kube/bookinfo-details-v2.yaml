@@ -36,11 +36,42 @@ spec:
     spec:
       containers:
       - name: details
-        image: ciscodevcloud/examples-bookinfo-details-v2:2.0.8
+        image: ciscodevcloud/examples-bookinfo-details-v2:2.1.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
         env:
+          - name: APPD_APP_NAME
+            value: bookinfo
+          - name: APPD_TIER_NAME
+            value: details
+          - name: APPD_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: APPD_CONTROLLER_HOST
+            valueFrom:
+              secretKeyRef:
+                key: appd_controller_host
+                name: appd-secrets
+          - name: APPD_CONTROLLER_PORT
+            value: "443"
+          - name: APPD_CONTROLLER_USE_SSL
+            value: "true"
+          - name: APPD_CONTROLLER_ACCOUNT
+            valueFrom:
+              secretKeyRef:
+                key: appd_controller_account
+                name: appd-secrets
+          - name: APPD_CONTROLLER_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                key: appd_controller_access_key
+                name: appd-secrets
+          - name: APPD_CONTROLLER_LOG_DIR
+            value: /tmp/appd/
+          - name: APPD_NODEINDEX_PATH
+            value: "/tmp/appdynamics/nodeindex"
           - name: DO_NOT_ENCRYPT
             value: "true"
         securityContext:

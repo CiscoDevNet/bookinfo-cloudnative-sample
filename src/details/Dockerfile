@@ -16,10 +16,6 @@ FROM ruby:2.7.1
 
 COPY Gemfile* /opt/microservices/
 COPY *.rb /opt/microservices/
-COPY config /opt/microservices/config
-
-COPY appdynamics-cpp-sdk /opt/appdynamics-cpp-sdk
-ENV LD_LIBRARY_PATH /opt/appdynamics-cpp-sdk:/opt/appdynamics-cpp-sdk/lib:$LD_LIBRARY_PATH
 
 RUN gem install activesupport appdynamics sinatra
 

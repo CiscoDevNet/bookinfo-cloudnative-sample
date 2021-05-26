@@ -29,23 +29,6 @@ spec:
   selector:
     app: details
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: appdynamics-conf
-data:
-  appdynamics.yml: |
-    app_name: bookinfo
-    tier_name: details
-    node_name: details-service-v1
-    controller:
-      host: <account_name>.saas.appdynamics.com
-      port: 443
-      account: <account_name>
-      access_key: <access_key>
-      use_ssl: true
-      log_dir: /tmp/
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -67,21 +50,42 @@ spec:
     spec:
       containers:
       - name: details
-        image: ciscodevcloud/examples-bookinfo-details-v1:2.0.8
+        image: ciscodevcloud/examples-bookinfo-details-v1:2.1.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
         env:
-        - name: APPD_NODEINDEX_PATH
-          value: "/tmp/appdynamics/nodeindex"
+          - name: APPD_APP_NAME
+            value: bookinfo
+          - name: APPD_TIER_NAME
+            value: details
+          - name: APPD_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: APPD_CONTROLLER_HOST
+            valueFrom:
+              secretKeyRef:
+                key: appd_controller_host
+                name: appd-secrets
+          - name: APPD_CONTROLLER_PORT
+            value: "443"
+          - name: APPD_CONTROLLER_USE_SSL
+            value: "true"
+          - name: APPD_CONTROLLER_ACCOUNT
+            valueFrom:
+              secretKeyRef:
+                key: appd_controller_account
+                name: appd-secrets
+          - name: APPD_CONTROLLER_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                key: appd_controller_access_key
+                name: appd-secrets
+          - name: APPD_CONTROLLER_LOG_DIR
+            value: /tmp/appd/
+          - name: APPD_NODEINDEX_PATH
+            value: "/tmp/appdynamics/nodeindex"
         securityContext:
           runAsUser: 1000
-        volumeMounts:
-        - name: appdynamics-conf
-          mountPath: /config
-          readOnly: true
-      volumes:
-        - name: appdynamics-conf
-          configMap:
-            name: appdynamics-conf
 ---
