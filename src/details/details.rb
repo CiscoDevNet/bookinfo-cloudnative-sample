@@ -24,8 +24,6 @@ require 'appdynamics/sinatra'
 set(:bind, '0.0.0.0')
 set(:port, 9080)
 
-set(:appdynamics_config, file: "/config/appdynamics.yml")
-
 get '/health' do
     content_type :json
     {'status' => 'details is healthy', 'version' => ENV['SERVICE_VERSION']}.to_json

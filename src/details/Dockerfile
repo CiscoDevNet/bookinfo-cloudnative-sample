@@ -16,7 +16,6 @@ FROM ruby:2.7.1
 
 COPY Gemfile* /opt/microservices/
 COPY *.rb /opt/microservices/
-COPY config /opt/microservices/config
 
 RUN gem install activesupport appdynamics sinatra
 

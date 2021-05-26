@@ -50,11 +50,14 @@ spec:
     spec:
       containers:
       - name: ratings
-        image: ciscodevcloud/examples-bookinfo-ratings-v1:2.0.5
+        image: ciscodevcloud/examples-bookinfo-ratings-v1:2.1.1
         imagePullPolicy: IfNotPresent
         env:
           - name: APPDYNAMICS_CONTROLLER_HOST_NAME
-            value: <account_name>.saas.appdynamics.com
+            valueFrom:
+              secretKeyRef:
+                key: appd_controller_host
+                name: appd-secrets
           - name: APPDYNAMICS_CONTROLLER_PORT
             value: "443"
           - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
@@ -68,9 +71,15 @@ spec:
           - name: APPDYNAMICS_AGENT_TIER_NAME
             value: ratings
           - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
-            value: <account_name>
+            valueFrom:
+              secretKeyRef:
+                key: appd_controller_account
+                name: appd-secrets
           - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
-            value: <access_key>
+            valueFrom:
+              secretKeyRef:
+                key: appd_controller_access_key
+                name: appd-secrets
         ports:
         - containerPort: 9080
         securityContext:
