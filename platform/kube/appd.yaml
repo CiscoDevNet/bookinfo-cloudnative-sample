@@ -45,3 +45,30 @@ data:
   APPDYNAMICS_CONTROLLER_HOST_NAME: <account_name>.saas.appdynamics.com
   APPDYNAMICS_CONTROLLER_PORT: "443"
   APPDYNAMICS_CONTROLLER_SSL_ENABLED: "true"
+---
+##################################################################################################
+# AppDynamics Java Agent Logging Configuration: redirect agent output to stdout
+##################################################################################################
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: appd-java-agent-log-config
+data:
+  log4j2.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Configuration status="INFO" monitorInterval="2">
+        <Appenders>
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="[%t] %d{ABSOLUTE} %5p %c{1} - %m%n"/>
+            </Console>
+        </Appenders>
+        <Loggers>
+            <!--  to control the logging level of the agent log files, change "level" attribute. level="all|trace|debug|info|warn|error"-->
+            <AsyncLogger name="com.singularity" level="warn" additivity="false">
+                <AppenderRef ref="Console"/>
+            </AsyncLogger>
+            <Root level="error">
+                <AppenderRef ref="Console"/>
+            </Root>
+        </Loggers>
+    </Configuration>

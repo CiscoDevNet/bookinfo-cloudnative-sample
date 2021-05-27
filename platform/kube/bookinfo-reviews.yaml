@@ -74,6 +74,8 @@ spec:
           mountPath: /opt/ibm/wlp/output
         - name: appd-agent-repo
           mountPath: /opt/appdynamics
+        - name: appd-java-agent-log-config
+          mountPath: /opt/appdynamics/ver20.8.0.30686/conf/logging
         securityContext:
           runAsUser: 1000
       volumes:
@@ -83,6 +85,9 @@ spec:
         emptyDir: {}
       - name: appd-agent-repo
         emptyDir: {}
+      - name: appd-java-agent-log-config
+        configMap:
+          name: appd-java-agent-log-config
       initContainers:
       - command:
         - cp
@@ -146,6 +151,8 @@ spec:
           mountPath: /opt/ibm/wlp/output
         - name: appd-agent-repo
           mountPath: /opt/appdynamics
+        - name: appd-java-agent-log-config
+          mountPath: /opt/appdynamics/ver20.8.0.30686/conf/logging
         securityContext:
           runAsUser: 1000
       volumes:
@@ -155,6 +162,9 @@ spec:
         emptyDir: {}
       - name: appd-agent-repo
         emptyDir: {}
+      - name: appd-java-agent-log-config
+        configMap:
+          name: appd-java-agent-log-config
       initContainers:
       - command:
         - cp
@@ -218,6 +228,8 @@ spec:
           mountPath: /opt/ibm/wlp/output
         - name: appd-agent-repo
           mountPath: /opt/appdynamics
+        - name: appd-java-agent-log-config
+          mountPath: /opt/appdynamics/ver20.8.0.30686/conf/logging
         securityContext:
           runAsUser: 1000
       volumes:
@@ -227,6 +239,9 @@ spec:
         emptyDir: {}
       - name: appd-agent-repo
         emptyDir: {}
+      - name: appd-java-agent-log-config
+        configMap:
+          name: appd-java-agent-log-config
       initContainers:
       - command:
         - cp
