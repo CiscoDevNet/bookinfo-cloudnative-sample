@@ -30,6 +30,5 @@ ENV ENABLE_RATINGS ${enable_ratings:-false}
 ENV STAR_COLOR ${star_color:-black}
 
 ENV OPENJ9_JAVA_OPTIONS "-javaagent:/opt/appdynamics/javaagent.jar -Dorg.osgi.framework.bootdelegation=META-INF.services,com.singularity.*,com.ibm.*"
-ENV WLP_SKIP_BOOTSTRAP_AGENT "true"
 
 CMD ["/opt/ibm/wlp/bin/server", "run", "defaultServer"]

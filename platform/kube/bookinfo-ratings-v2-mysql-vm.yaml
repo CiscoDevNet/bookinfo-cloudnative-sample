@@ -46,7 +46,10 @@ spec:
           - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
             value: "true"
           - name: APPDYNAMICS_AGENT_APPLICATION_NAME
-            value: bookinfo
+            valueFrom:
+              configMapKeyRef:
+                key: APPDYNAMICS_AGENT_APPLICATION_NAME
+                name: appd-agent-envs
           - name: APPDYNAMICS_AGENT_NODE_NAME
             value: ratings-v2
           - name: APPDYNAMICS_AGENT_TIER_NAME

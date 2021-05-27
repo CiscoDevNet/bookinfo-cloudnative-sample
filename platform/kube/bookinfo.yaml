@@ -76,7 +76,10 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
           - name: APPD_APP_NAME
-            value: bookinfo
+            valueFrom:
+              configMapKeyRef:
+                key: APPDYNAMICS_AGENT_APPLICATION_NAME
+                name: appd-agent-envs
           - name: APPD_TIER_NAME
             value: details
           - name: APPD_NODE_NAME
@@ -141,7 +144,7 @@ metadata:
     app: ratings
     version: v1
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ratings
@@ -168,7 +171,10 @@ spec:
           - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
             value: "true"
           - name: APPDYNAMICS_AGENT_APPLICATION_NAME
-            value: bookinfo
+            valueFrom:
+              configMapKeyRef:
+                key: APPDYNAMICS_AGENT_APPLICATION_NAME
+                name: appd-agent-envs
           - name: APPDYNAMICS_AGENT_NODE_NAME
             value: ratings-v1
           - name: APPDYNAMICS_AGENT_TIER_NAME

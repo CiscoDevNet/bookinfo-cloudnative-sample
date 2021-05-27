@@ -46,7 +46,10 @@ spec:
           - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
             value: "true"
           - name: APPDYNAMICS_AGENT_APPLICATION_NAME
-            value: bookinfo
+            valueFrom:
+              configMapKeyRef:
+                key: APPDYNAMICS_AGENT_APPLICATION_NAME
+                name: appd-agent-envs
           - name: APPDYNAMICS_AGENT_NODE_NAME
             value: ratings-v2
           - name: APPDYNAMICS_AGENT_TIER_NAME
@@ -69,13 +72,13 @@ spec:
           - name: DB_TYPE
             value: "mysql"
           - name: MYSQL_DB_HOST
-            value: database-1.cluster-comev0ayhdjo.us-west-2.rds.amazonaws.com
+            value: mysqldb
           - name: MYSQL_DB_PORT
             value: "3306"
           - name: MYSQL_DB_USER
-            value: appd_mysql
+            value: root
           - name: MYSQL_DB_PASSWORD
-            value: appd_mysql
+            value: password
         ports:
         - containerPort: 9080
         securityContext:
