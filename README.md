@@ -36,16 +36,19 @@ multiple from different geographic location in world.
 ## Setup Application 
 
 1. Pre-requisite
+
   - Access to working kubernetes cluster and local kubectl cli. [Docker desktop kubernetes](https://docs.docker.com/desktop/kubernetes/), [Minikube](https://minikube.sigs.k8s.io/docs/start/) or [kind](https://kind.sigs.k8s.io/) are some of popular
   options to setup local kubernetes cluster. 
   - [Trial account for AppDynamics](https://www.appdynamics.com/free-trial/)
   - [Trial account for ThousandEyes](https://www.thousandeyes.com/lps/network-monitoring/#lps-free-trial)
   
 2. Clone the code to local laptop 
+
     ```
     git clone https://github.com/CiscoDevNet/bookinfo-cloudnative-sample
     ```
 3. Get Access Key and account details from AppDynamics
+
      ![Access keys & Account Name](docs/appd-account.gif)
 
 4. Update Access Keys and deploy microservices pods
@@ -78,12 +81,15 @@ multiple from different geographic location in world.
 5. Access app, browse various page & login using 'demo' and 'demo' cred. 
 
    This will start sending metrics to AppdAccount
+   
    ![Application Browsing](docs/bookinfo-app.gif)
 
 6. Check Application and Infra monitoring details in AppDynamics account 
+
    ![AppDynamics Monitoring Details](docs/appd-bookinfo.gif)
 
 7. Register Web Test on ThousandEyes
+
    ![ThousandEyes Test Addition & reports](docs/ThousandEyes-TestCreate.gif)
 
 
@@ -91,12 +97,15 @@ multiple from different geographic location in world.
 
 ## AppDynamic Agents Instrumentation of Microservices 
 1. Python agent for 'Product Page' 
+
    [AppDynamics Agent for Python](https://docs.appdynamics.com/21.5/en/application-monitoring/install-app-server-agents/python-agent) is installed using pip package  via [requirements.txt](src/productpage/requirements.txt)
 
 2. Ruby agent for 'Details Service'
+
    [AppDynamics Agent for Ruby](https://docs.appdynamics.com/display/RUBY/Getting+Started+with+Ruby+Agent) is installed using [Gemfile](src/details/Gemfile) 
 
 3. Java agent for 'Review' Service
+
    [AppDynamics agent for Java](https://docs.appdynamics.com/21.5/en/application-monitoring/install-app-server-agents/java-agent/install-the-java-agent/install-the-java-agent-in-containers#InstalltheJavaAgentinContainers-init) is inserted using [init-container](platform/kube/bookinfo.yaml). 
    ```
          initContainers:
@@ -119,4 +128,5 @@ multiple from different geographic location in world.
 5. Agent configuration are set for following [AppDynamics agents configuration Best Practices in kubernetes](https://docs.appdynamics.com/21.5/en/application-monitoring/install-app-server-agents/container-installation-options/instrument-kubernetes-applications-manually/best-practices-to-configure-agents-in-kubernetes) refer [appd.yaml](platform/kube/appd.yaml) and [bookinfo.yaml](platform/kube/bookinfo.yaml) for details. 
 
 ## Rebuild Microservices docker images
-      Refer : [Build Document](docs/build.md)
+
+ Refer [Build Document](docs/build.md) for build instruction.
