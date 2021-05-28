@@ -1,100 +1,122 @@
-# Bookinfo Sample
+# Cloud Native Sample Bookinfo App Observability
 
-See <https://istio.io/docs/examples/bookinfo/>.
+Bookinfo is a sample application composed of four Microservices written in different languages. Application is originally 
+created by as part of Istio project to demonstrate various Istio features, See <https://istio.io/docs/examples/bookinfo/>.
 
-**Note**: We need the owner of the PR to perform the appropriate testing with built/pushed images to their own docker repository before we would build/push images to the official Istio repository.
+Project extends this sample application to demonstrate observability of Cloud Native application using [Cisco AppDynamics](https://www.appdynamics.com/) 
+and [ThousandEyes](https://www.thousandeyes.com/). 
+Microservices code and docker images area extended to include respective AppDynamics agents that enables [Application Performance Monitoring]() 
+for these microservices. [ThousandEyes Web App monitoring](https://www.thousandeyes.com/resources/website-monitoring-use-case) is also configured, that helps understand understand how HTTP, page load and transaction 
+performance is affected by the network, and how it stacks up against other similar services.     
 
-## Build docker images
 
-```bash
-cd samples/bookinfo
-src/build-services.sh <version> <prefix>
-```
+## Architecture
+Sample book info application is created using 4 polygot microservices & can be deployed on kubernetes cluster. 
 
-Where `<version>` is the tag and `<prefix>` is the docker registry to tag the images.
+![](docs/Bookinfo-Appd-agent.png)
+ 
+Microservice details 
 
-For example:
+| Service Name | Language | Details | 
+|--------------|----------|---------|
+|Product Page  | Python   | Frontend Microservices service simple web page showing book details, reviews & ratings| 
+|Details       | Ruby     | The details microservice contains book information.| 
+|Review        | Java     | The reviews microservice contains book reviews. It also calls the ratings microservice.|
+|Ratings       | NodeJS   | The ratings microservice contains book ranking information that accompanies a book review.|
 
-```bash
-$ src/build-services.sh 1.16.3 docker.io/shamsher31
-Sending build context to Docker daemon  1.218MB
-Step 1/16 : FROM python:3.7.7-slim
-3.7.7-slim: Pulling from library/python
-8559a31e96f4: Pull complete
-...
-Successfully built 1b293582cc2e
-Successfully tagged shamsher31/examples-bookinfo-ratings-v2:1.16.3
-Successfully tagged shamsher31/examples-bookinfo-ratings-v2:latest
-```
 
-The bookinfo versions are different from Istio versions since the sample should work with any version of Istio.
+Full Stack Observability are enabled for this application (composed of microservices) that monitors user experience, business transaction, 
+container, virtual machine, Kubernetes container orchestrator etc.  Each Microservices is instrumented with respective language AppDynamics agent to enable application monitoring data. 
+In addition to this [AppD cluster agent for Kubernetes](https://docs.appdynamics.com/21.5/en/infrastructure-visibility/monitor-kubernetes-with-the-cluster-agent) is also setup too to monitor health of Kubernetes and collect metrics and metadata for entire cluster, including every node and container. 
 
-## Push docker images to docker hub
+For ProductPage web endpoints the HTTP monitor are added to ThousandEyes that can monitor Response time, Availability and Throughput from 
+multiple from different geographic location in world.   
 
-After the local build is successful, you need to update the YAML file with the latest tag that you used during the build eg: `1.16.3`.
 
-Run the following script to build the docker images, push them to docker hub, and to update the YAML files in one step.
+## Setup Application 
 
-```bash
-./build_push_update_images.sh <version> <prefix>
-```
+1. Pre-requisite
+  - Access to working kubernetes cluster and local kubectl cli. [Docker desktop kubernetes](https://docs.docker.com/desktop/kubernetes/), [Minikube](https://minikube.sigs.k8s.io/docs/start/) or [kind](https://kind.sigs.k8s.io/) are some of popular
+  options to setup local kubernetes cluster. 
+  - [Trial account for AppDynamics](https://www.appdynamics.com/free-trial/)
+  - [Trial account for ThousandEyes](https://www.thousandeyes.com/lps/network-monitoring/#lps-free-trial)
+  
+2. Clone the code to local laptop 
+    ```
+    git clone https://github.com/CiscoDevNet/bookinfo-cloudnative-sample
+    ```
+3. Get Access Key and account details from AppDynamics
+     ![Access keys & Account Name](docs/appd-account.gif)
 
-For example:
+4. Update Access Keys and deploy microservices pods
 
-```bash
-$ ./build_push_update_images.sh 1.16.3 --prefix=shamsher31
-...
-1.16.3: digest: sha256:70634d3847a190b9826975c8 size: 3883
-Pushing: shamsher31/examples-bookinfo-reviews-v2:1.16.3
-The push refers to a repository [docker.io/shamsher31/examples-bookinfo-reviews-v2]
-...
-```
+    i. Modify access-key (base64 encoded), APPDYNAMICS_AGENT_ACCOUNT_NAME (account_name) and APPDYNAMICS_CONTROLLER_HOST_NAME in field
+    ```
+    echo -n <access-key> | base64 - 
+    vi platform/kube/appd.yaml
+    ```
+    ii. Upload Secret 
+    ```
+    kubectl apply -f platform/kube/appd.yaml
+    ```
+    iii. Deploy microservice pods & created services
+    ```
+    kubectl apply -f platform/kube/bookinfo.yaml
+    ```
 
-Verify that expected tag eg: `1.16.3` is updated in `platform/kube/bookinfo*.yaml` files.
+    ![Sample Creation](docs/start-services.gif)
+    
+    iv. Expose service to internet
+    If your cluster have ingress with public internet domain configured use same. 
 
-## Tests
+    Alternative option is to expose service using [ngork](https://ngrok.com/). Service needs to exposed so that ThousandEye can test app. 
+    **NOTE**: This is will expose your app to world so please read yourself aware of ngrok. 
+    ```
+    kubectl run --restart=Never   -t -i --rm   ngrok --image=gcr.io/kuar-demo/ngrok   -- http productpage:9080
+    ```
 
-Test that the bookinfo samples work with the latest tag eg: `1.16.3` that you pushed.
+5. Access app, browse various page & login using 'demo' and 'demo' cred. 
 
-```bash
-$ cd ../../
-$ kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
-serviceaccount/bookinfo-details created
-deployment.apps/details-v1 created
-serviceaccount/bookinfo-ratings created
-...
-```
+   This will start sending metrics to AppdAccount
+   ![Application Browsing](docs/bookinfo-app.gif)
 
-Wait for all the pods to be in `Running` start.
+6. Check Application and Infra monitoring details in AppDynamics account 
+   ![AppDynamics Monitoring Details](docs/appd-bookinfo.gif)
 
-```bash
-$ kubectl get pods
-NAME                              READY   STATUS    RESTARTS   AGE
-details-v1-7f556f5c6b-485l2       2/2     Running   0          10m
-productpage-v1-84c8f95c8d-tlml2   2/2     Running   0          10m
-ratings-v1-66777f856b-2ls78       2/2     Running   0          10m
-reviews-v1-64c47f4f44-rx642       2/2     Running   0          10m
-reviews-v2-66b6b95f44-s5nt6       2/2     Running   0          10m
-reviews-v3-7f69dd7fd4-zjvc8       2/2     Running   0          10m
-```
+7. Register Web Test on ThousandEyes
+   ![ThousandEyes Test Addition & reports](docs/ThousandEyes-TestCreate.gif)
 
-Once all the pods are in the `Running` state. Test if the bookinfo works through cli.
 
-```bash
-$ kubectl exec -it "$(kubectl get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')" -c ratings -- curl productpage:9080/productpage | grep -o "<title>.*</title>"
-<title>Simple Bookstore App</title>
-```
 
-You can also test it by hitting producpage in the browser.
 
-```bash
-http://192.168.39.116:31395/productpage
-```
+## AppDynamic Agents Instrumentation of Microservices 
+1. Python agent for 'Product Page' 
+   [AppDynamics Agent for Python](https://docs.appdynamics.com/21.5/en/application-monitoring/install-app-server-agents/python-agent) is installed using pip package  via [requirements.txt](src/productpage/requirements.txt)
 
-You should see the following in the browser.
+2. Ruby agent for 'Details Service'
+   [AppDynamics Agent for Ruby](https://docs.appdynamics.com/display/RUBY/Getting+Started+with+Ruby+Agent) is installed using [Gemfile](src/details/Gemfile) 
 
-![star](https://user-images.githubusercontent.com/2920003/86032538-212ff900-ba55-11ea-9492-d4bc90656a02.png)
+3. Java agent for 'Review' Service
+   [AppDynamics agent for Java](https://docs.appdynamics.com/21.5/en/application-monitoring/install-app-server-agents/java-agent/install-the-java-agent/install-the-java-agent-in-containers#InstalltheJavaAgentinContainers-init) is inserted using [init-container](platform/kube/bookinfo.yaml). 
+   ```
+         initContainers:
+        - command:
+            - cp
+            - -r
+            - /opt/appdynamics/.
+            - /opt/temp
+          name: appd-agent
+          image: docker.io/appdynamics/java-agent:20.8.0
+          volumeMounts:
+            - mountPath: /opt/temp
+              name: appd-agent-repo
+   ```
 
-**Note**: If everything works as mentioned above, request a new official set of images be built and pushed from the reviewer, and add another commit to the original PR with the version changes.
+4. NodeJS 'Rating' Service
+   [AppDynamics agent for NodeJS](https://docs.appdynamics.com/21.5/en/application-monitoring/install-app-server-agents/node-js-agent) are installed using npm install in  [package.json](src/ratings/package.json)
 
-Bookinfo is tested by istio.io integration tests. You can find them under [tests](https://github.com/istio/istio.io/tree/master/tests) in the [istio/istio.io](https://github.com/istio/istio.io) repository.
+
+5. Agent configuration are set for following [AppDynamics agents configuration Best Practices in kubernetes](https://docs.appdynamics.com/21.5/en/application-monitoring/install-app-server-agents/container-installation-options/instrument-kubernetes-applications-manually/best-practices-to-configure-agents-in-kubernetes) refer [appd.yaml](platform/kube/appd.yaml) and [bookinfo.yaml](platform/kube/bookinfo.yaml) for details. 
+
+## Rebuild Microservices docker images
+      Refer : [Build Document](docs/build.md)
