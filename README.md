@@ -1,3 +1,5 @@
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/CiscoDevNet/bookinfo-cloudnative-sample)
+
 # Cloud Native Sample Bookinfo App Observability
 
 Bookinfo is a sample application composed of four Microservices written in different languages. Application is originally 
