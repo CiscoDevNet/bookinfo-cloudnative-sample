@@ -23,32 +23,46 @@ from config import token, productpage
 
 base_url = "https://api.thousandeyes.com/v6/"
 
-def create_test(test):
+def list_tests():
     headers = {"Authorization": token, "Content-Type": "application/json", "Accept": "application/json"}
-    resp = requests.post(url='{}/tests/{}/new.json'.format(base_url, test["type"]), headers=headers, data=json.dumps(test))
+    resp = requests.get(url='{}/tests.json'.format(base_url), headers=headers)
+    tests = {}
+    for test in json.loads(resp.content)["test"]:
+        tests[test["testName"]] = test["testId"]
+    return tests
+
+def create_test(tests, test):
+    headers = {"Authorization": token, "Content-Type": "application/json", "Accept": "application/json"}
+    testId = tests.get(test["testName"], 0)
+    if testId == 0:
+        resp = requests.post(url='{}/tests/{}/new.json'.format(base_url, test["type"]), headers=headers, data=json.dumps(test))
+    else:
+        resp = requests.post(url='{}/tests/{}/{}/update.json'.format(base_url, test["type"], testId), headers=headers, data=json.dumps(test))
     print(resp.status_code, test["type"], test["testName"])
 
 def main():
+    tests = list_tests()
+
     pageLoad  = {
         "agents": [{"agentId": 4503}, {"agentId": 4509}, {"agentId": 4577}, {"agentId": 47351}, {"agentId": 48608}],
  		"testName": "bookinfo-test-1",
 		"type": "page-load",
-		"interval": 300,
-		"httpInterval": 300,
+		"interval": 900,
+		"httpInterval": 900,
 		"url": productpage
     }
-    create_test(pageLoad)
+    create_test(tests, pageLoad)
 
     transactions = {
         "agents": [{"agentId": 4503}, {"agentId": 4509}, {"agentId": 4577}, {"agentId": 47351}, {"agentId": 48608}],
  		"testName": "bookinfo-test-2",
 		"type": "web-transactions",
-		"interval": 300,
-		"httpInterval": 300,
+		"interval": 3600,
+		"httpInterval": 3600,
 		"url": productpage,
         "transactionScript": open("script.js", "r").read()
     }
-    create_test(transactions)
+    create_test(tests, transactions)
 
 
 if __name__ == '__main__':
