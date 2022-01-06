@@ -1,0 +1,40 @@
+# Default values for fso-bookinfo-demo.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## AppDynamics ##
+appDynamics:
+  account_name: ""
+  account_key: ""
+
+## Details Service ##
+detailsService:
+  replicaCount: 1
+  service:
+    type: ClusterIP # ClusterIP, NodePort, LoadBalancer
+    targetPort: 9080
+    port: 9080 ## External Port for LoadBalancer/NodePort
+
+## Ratings Service ##
+ratingsService:
+  replicaCount: 2
+  service:
+    type: ClusterIP # ClusterIP, NodePort, LoadBalancer
+    targetPort: 9080
+    port: 9080 ## External Port for LoadBalancer/NodePort
+
+## Reviews Service ##
+reviewsService:
+  replicaCount: 1
+  service:
+    type: ClusterIP # ClusterIP, NodePort, LoadBalancer
+    targetPort: 9080
+    port: 9080 ## External Port for LoadBalancer/NodePort
+
+## Product Page Service ##
+productPageService:
+  replicaCount: 1
+  service:
+    type: LoadBalancer # ClusterIP, NodePort, LoadBalancer
+    targetPort: 9080
+    port: 8080 ## External Port for LoadBalancer/NodePort

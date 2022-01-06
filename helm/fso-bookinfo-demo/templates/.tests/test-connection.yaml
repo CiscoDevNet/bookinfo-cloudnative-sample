@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "fso-bookinfo-demo.fullname" . }}-test-connection"
+  labels:
+    {{- include "fso-bookinfo-demo.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "fso-bookinfo-demo.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
